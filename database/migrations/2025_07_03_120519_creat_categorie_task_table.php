@@ -6,14 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('categorie', function (Blueprint $table) {
+        Schema::create('categorie_task', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
+            $table->foreignId('categorie_id')->constrained('categories')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -23,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categorie');
+        Schema::dropIfExists('categorie_task');
     }
 };

@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model
+class profile extends Model
 {
-    protected $fillable = ['phone', 'date_of_birth', 'address', 'bio'];
+    protected $fillable = ['name','email','phone', 'date_of_birth', 'address', 'bio'];
     protected $guarded = ['id'];
     protected $table = 'profiles';
 
-    public function Tasks()
+    public function tasks()
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(categorie::class,'Categorie_task');
     }
 }
