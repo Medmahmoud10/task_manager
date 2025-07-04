@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\categoriescontroller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -13,6 +14,14 @@ Route::get('/user', function (Request $request) {
 
 
 Route::apiResource('tasks', TaskController::class);
-Route::get('tasks/{id}/categories/profiles', [TaskController::class, 'getCategories']);
 Route::apiResource('profiles', ProfileController::class);
-Route::apiResource('tasks/{task_id}/categories', TaskController::class);
+Route::apiResource('profiles.tasks', TaskController::class)->shallow();
+Route::apiResource('tasks.categorie_task', TaskController::class);
+Route::apiResource('tasks.categories', TaskController::class)->only(['index']);
+Route::apiResource('tasks.categories', TaskController::class)->only([
+    'index', 'store', 'destroy'
+]);
+// Route::apiResource('profiles.tasks', ProfileController::class) // Profile-task relationships
+//     ->only(['index', 'store']); // Category-task relationships
+// Route::apiResource('categories.tasks', categoriescontroller::class)
+//     ->only(['index']);  // GET /categories/{category}/tasks

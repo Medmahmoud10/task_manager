@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Database\Eloquent\Model;
 
-class categorie  extends Model
+class categories  extends Model
 {
     public function tasks()
     {

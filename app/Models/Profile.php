@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class profile extends Model
 {
-    protected $fillable = ['name','email','phone', 'date_of_birth', 'address', 'bio'];
+    protected $fillable = ['name','email','phone', 'date_of_birth', 'address', 'bio','user_id'];
     protected $guarded = ['id'];
     protected $table = 'profiles';
 
     public function tasks()
     {
-        return $this->hasMany(categorie::class,'Categorie_task');
+        return $this->hasMany(categories::class,'Categorie_task');
     }
 }

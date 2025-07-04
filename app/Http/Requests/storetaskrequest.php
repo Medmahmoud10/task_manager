@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class updatetaskcontroller extends FormRequest
+class storetaskrequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,11 @@ class updatetaskcontroller extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'priority' => 'required|integer|min:1|max:5'
+            'priority' => 'required|integer|in:1,2,3', // Assuming 1=Low, 2=Medium, 3=High
+            'categorie_id' => 'required|exists:categories,id',
+            'user_id' => 'required|exists:users,id',
+            'profile_id' => 'required|exists:profiles,id', // Assuming tasks are linked to profiles
+
         ];
     }
 }

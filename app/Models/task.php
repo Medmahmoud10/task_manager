@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class task extends Model
 {
-    protected $fillable = ['title', 'description', 'priority','Profile_id',];
+    protected $fillable = ['title', 'description', 'priority','Profile_id'];
     protected $guarded = ['id'];
     protected $table = 'tasks';
 
@@ -17,11 +17,15 @@ class task extends Model
 
     public function categories()
     {
-        return $this->BelongsToMany(categorie::class, 'Categorie_task');
+        return $this->belongsToMany(categories::class, 'categorie_task', 'task_id', 'categorie_id');
     }
 
-    // public function category()
-    // {
-    //     return $this->belongsTo(categorie::class, 'categorie_id');
-    // }
+
+
+
+
+
+
+    
+
 }

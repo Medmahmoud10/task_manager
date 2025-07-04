@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class profilerequestcontroller extends FormRequest
 {
@@ -24,12 +25,22 @@ class profilerequestcontroller extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',
-            'email' => 'required|email|max:255|unique:profiles,email,' . $this->route('profile'),
+            'email' => [ 'required','email','max :255',
+            ],
             'phone' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:255',
-            'date of birth' => 'nullable|date',
-            'bio' => 'nullable|string|max:500',
+            'date_of_birth' => 'nullable|date|before_or_equal:-18 years',
+            'bio' => 'nullable|string|max:500'
+        ];
+    }
 
+
+
+    public function messages()
+    {
+        return [
+            'email.unique' => 'This email is already registered',
+            'date_of_birth.before_or_equal' => 'You must be at least 18 years old'
         ];
     }
 }

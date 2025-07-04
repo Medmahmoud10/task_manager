@@ -3,28 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\profilerequestcontroller;
+use App\Http\Requests\storetaskrequest;
 use App\Http\Requests\updateprofilerequestcontroller;
 use App\Models\profile;
+use App\Models\task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class profilecontroller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+
+    public function getCategoryTasks($categorie_id)
+    {
+        $tasks = task::where('categorie_id', $categorie_id)->get();
+        return response()->json($tasks);
+    }
+
+
+
+    public function storeTaskUnderProfile(storetaskrequest $request, $profileId)
+{
+     $task = Task::create($request->validated());
+    
+    return response()->json([
+        'success' => true,
+        'task' => $task->load('categorie') // Eager load category
+    ], 201);
+}
+
+
+
     public function index()
     {
-        $profile=profile::all();
-        return response()->json($profile, 200); 
+        $profile = profile::all();
+        return response()->json($profile, 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(profilerequestcontroller $request)
+    public function store(storetaskrequest $request, profile $profile)
     {
-        $profile = profile::create($request->all());
-        return response()->json($profile, 201);
+        $task = $profile->tasks()->create($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'task' => [
+                'id' => $task->id,
+                'title' => $task->title,
+                'priority' => $task->priority,
+                'profile_id' => $task->profile_id,
+                'category' => $task->category->name // Loads relationship
+              ]
+        ], 201);
     }
 
     /**
@@ -42,10 +74,9 @@ class profilecontroller extends Controller
     public function update(updateprofilerequestcontroller $request, string $id)
     {
         $profile = profile::findOrFail($id);
-        $profile->update($request->all());
+        $profile->update($request->validated());
         return response()->json($profile, 200);
     }
-
     /**
      * Remove the specified resource from storage.
      */
