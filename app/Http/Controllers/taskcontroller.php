@@ -128,7 +128,7 @@ class taskcontroller extends Controller
         ]);
 
         $task = Task::findOrFail($task_id);
-        $task->update(['category_id' => $validated['category_id']]);
+        $task->update(['categorie_id' => $validated['categorie_id']]);
 
         return response()->json($task);
     }
