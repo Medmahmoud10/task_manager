@@ -18,9 +18,20 @@ Route::apiResource('profiles', ProfileController::class);
 Route::apiResource('profiles.tasks', TaskController::class)->shallow();
 Route::apiResource('tasks.categorie_task', TaskController::class);
 Route::apiResource('tasks.categories', TaskController::class)->only(['index']);
-Route::apiResource('tasks.categories', TaskController::class)->only([
-    'index', 'store', 'destroy'
-]);
+Route::post('registre', [UserController::class, 'Registre']);
+Route::post('Login', [UserController::class, 'Login']); 
+Route::post('Logout', [UserController::class, 'Logout'])->middleware('auth:sanctum');
+
+
+
+
+
+
+
+
+
+
+
 // Route::apiResource('profiles.tasks', ProfileController::class) // Profile-task relationships
 //     ->only(['index', 'store']); // Category-task relationships
 // Route::apiResource('categories.tasks', categoriescontroller::class)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\storetaskrequest;
 use App\Http\Requests\updatetaskrequest;
+use App\Models\categories;
 use App\Models\task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,50 +51,27 @@ class taskcontroller extends Controller
 
         return response()->json($categories);
     }
-    
+
     public function getTaskCategories($task_id)
-{
-    try {
-        // Eager load categories with pivot data
-        $task = Task::with(['categories' => function($query) {
-            $query->select('categories.id', 'name', 'created_at', 'updated_at');
-        }])->findOrFail($task_id);
+    {
+        $task = \App\Models\task::with('categories')->find($task_id);
 
-        // Transform the response to match your desired format
-        $formattedCategories = $task->categories->map(function($category) use ($task_id) {
-            return [
-                'id' => $category->id,
-                'name' => $category->name,
-                'created_at' => $category->created_at,
-                'updated_at' => $category->updated_at,
-                'pivot' => [
-                    'task_id' => $task_id,
-                    'category_id' => $category->id
-                ]
-            ];
-        });
+        // Return error if task doesn't exist
+        if (!$task) {
+            return response()->json(['error' => 'Task not found'], 404);
+        }
 
-        return response()->json($formattedCategories);
-
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        return response()->json([
-            'error' => 'Task not found'
-        ], 404);
+        // Return formatted categories
+        return response()->json($task->categories);
     }
-}
 
 
 
-
-
-// app/Http/Controllers/TaskController.php
-public function indexCategories(Task $task)
-{
-    try {
-        $categories = $task->categories()->select('id', 'name', 'created_at', 'updated_at')->get();
-        
+    // app/Http/Controllers/TaskController.php
+    public function indexCategories(Task $task)
+    {
         return response()->json(
-            $categories->map(function($category) use ($task) {
+            $task->categories->map(function ($category) use ($task) {
                 return [
                     'id' => $category->id,
                     'name' => $category->name,
@@ -106,11 +84,8 @@ public function indexCategories(Task $task)
                 ];
             })
         );
-        
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
+        return $task->categories;
     }
-}
 
 
 
@@ -121,28 +96,38 @@ public function indexCategories(Task $task)
     //     return response()->json($tasks);
     // }
 
-
-
-
     // public function getTaskWithRelations($taskId)
     // {
     //     $task = Task::with(['profile', 'category'])->findOrFail($taskId);
     //     return response()->json($task);
     // }
-    public function index()
+    public function index(task $task)
     {
         $task = task::all();
         return response()->json($task, 200);
+        $task->load(['categories' => function ($query) {
+            $query->select('categories.id', 'name', 'created_at', 'updated_at');
+        }]);
+
+        return $task->categories;
     }
 
+   
 
-    public function updateTaskCategory(Request $request, $taskId)
+    /**
+     * Update the category of a task.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $task_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateTaskCategory(Request $request, $task_id)
     {
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id'
         ]);
 
-        $task = Task::findOrFail($taskId);
+        $task = Task::findOrFail($task_id);
         $task->update(['category_id' => $validated['category_id']]);
 
         return response()->json($task);

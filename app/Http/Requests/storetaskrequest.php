@@ -22,7 +22,7 @@ class storetaskrequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'priority' => 'required|integer|in:1,2,3', // Assuming 1=Low, 2=Medium, 3=High
             'categorie_id' => 'required|exists:categories,id',

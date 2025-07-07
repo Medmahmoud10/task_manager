@@ -17,7 +17,13 @@ class task extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(categories::class, 'categorie_task', 'task_id', 'categorie_id');
+        // return $this->belongsToMany(categories::class, 'categorie_task', 'task_id', 'categorie_id');
+        return $this->belongsToMany(
+        \App\Models\categories::class, // Full namespace
+        'categorie_task', // pivot table name
+        'task_id',       // foreign key on pivot table
+        'categorie_id'   // related key on pivot table
+    )->withPivot('task_id', 'categorie_id');
     }
 
 

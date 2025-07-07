@@ -24,7 +24,7 @@ class profilerequestcontroller extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'nullable|exists:users,id',
             'email' => [ 'required','email','max :255',
             ],
             'phone' => 'nullable|string|max:15',
