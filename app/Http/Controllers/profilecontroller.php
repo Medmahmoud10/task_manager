@@ -2,88 +2,150 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\profilerequestcontroller;
-use App\Http\Requests\storetaskrequest;
-use App\Http\Requests\updateprofilerequestcontroller;
-use App\Models\profile;
-use App\Models\task;
+use App\Http\Requests\UpdateProfileRequest;
+use App\Models\Profile;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class profilecontroller extends Controller
+
+
+class ProfileController extends Controller
 {
-
-
-    public function getCategoryTasks($categorie_id)
-    {
-        $tasks = task::where('categorie_id', $categorie_id)->get();
-        return response()->json($tasks);
-    }
-
-
-
-    public function storeTaskUnderProfile(storetaskrequest $request, $profileId)
-{
-     $task = Task::create($request->validated());
-    
-    return response()->json([
-        'success' => true,
-        'task' => $task->load('categorie') // Eager load category
-    ], 201);
-}
-
-
-
-    public function index()
-    {
-        $profile = profile::all();
-        return response()->json($profile, 200);
-    }
-
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
+     * 
+     * @route GET /api/profiles
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(storetaskrequest $request, profile $profile)
+    public function index(): JsonResponse
     {
-        $task = $profile->tasks()->create($request->validated());
-
-        return response()->json([
-            'success' => true,
-            'task' => [
-                'id' => $task->id,
-                'title' => $task->title,
-                'priority' => $task->priority,
-                'profile_id' => $task->profile_id,
-                'category' => $task->category->name // Loads relationship
-              ]
-        ], 201);
+        try {
+            $profiles = Profile::all();
+            
+            return response()->json([
+                'success' => true,
+                'data' => $profiles,
+                'message' => 'Profiles retrieved successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve profiles',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
+     * 
+     * @route GET /api/profiles/{id}
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(int $id)
+    public function show(string $id): JsonResponse
     {
-        $profile = profile::find($id);
-        return response()->json($profile, 200);
+        try {
+            $profile = Profile::findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $profile,
+                'message' => 'Profile retrieved successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Profile not found',
+                'error' => $e->getMessage()
+            ], 404);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Store a new profile.
+     * 
+     * @route POST /api/profiles
+     * @param UpdateProfileRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(updateprofilerequestcontroller $request, string $id)
+    public function store(UpdateProfileRequest $request): JsonResponse
     {
-        $profile = profile::findOrFail($id);
-        $profile->update($request->validated());
-        return response()->json($profile, 200);
+        try {
+            $validated = $request->validated();
+            $profile = Profile::create($validated);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $profile,
+                'message' => 'Profile created successfully'
+            ], 201);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create profile',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
     /**
-     * Remove the specified resource from storage.
+     * Update the specified resource.
+     * 
+     * @route PUT /api/profiles/{id}
+     * @param UpdateProfileRequest $request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(string $id)
+    public function update(UpdateProfileRequest $request, string $id): JsonResponse
     {
-        $profile = profile::findOrFail($id);
-        $profile->delete();
-        return response()->json(null, 204);
+        try {
+            $profile = Profile::findOrFail($id);
+            $validated = $request->validated();
+            $profile->update($validated);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $profile,
+                'message' => 'Profile updated successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update profile',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource.
+     * 
+     * @route DELETE /api/profiles/{id}
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(string $id): JsonResponse
+    {
+        try {
+            $profile = Profile::findOrFail($id);
+            $profile->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile deleted successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete profile',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

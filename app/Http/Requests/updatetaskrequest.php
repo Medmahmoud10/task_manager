@@ -22,9 +22,12 @@ class updatetaskrequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'priority' => 'required|integer|in:1,2,3',
+            'priority' => 'nullable|integer|in:1,2,3', // Assuming 1=Low, 2=Medium, 3=High
+            'profile_id' => 'nullable|exists:profiles,id',
+            'categorie_id' => 'nullable|exists:categories,id',
+            'user_id' => 'nullable|exists:users,id',
         ];
     }
 }

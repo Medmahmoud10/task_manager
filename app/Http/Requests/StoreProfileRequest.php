@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class updateprofilerequest extends FormRequest
+class StoreProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return True;
     }
 
     /**
@@ -23,11 +23,12 @@ class updateprofilerequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'avatar' => 'image|mimes:jpeg,png,jpg,gif',
-            'birthdate' => 'date|nullable',
-            'bio' => 'string|max:500|nullable',
-            'user_id' => 'exists:users,id|required',
+            'user_id' => 'required|exists:users,id',
+            'email' => 'required|email|max:255|unique:profiles,email,' . $this->route('profile'),
+            'phone' => 'nullable|string|max:15',
+            'address' => 'nullable|string|max:255',
+            'date_of_birth' => 'nullable|date',
+            'bio' => 'nullable|string|max:500',
         ];
     }
 }
