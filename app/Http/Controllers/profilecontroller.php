@@ -21,13 +21,12 @@ class ProfileController extends Controller
     {
         try {
             $profiles = Profile::all();
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $profiles,
                 'message' => 'Profiles retrieved successfully'
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -48,13 +47,12 @@ class ProfileController extends Controller
     {
         try {
             $profile = Profile::findOrFail($id);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $profile,
                 'message' => 'Profile retrieved successfully'
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -76,13 +74,12 @@ class ProfileController extends Controller
         try {
             $validated = $request->validated();
             $profile = Profile::create($validated);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $profile,
                 'message' => 'Profile created successfully'
             ], 201);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -101,26 +98,38 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateProfileRequest $request, string $id): JsonResponse
-    {
-        try {
-            $profile = Profile::findOrFail($id);
-            $validated = $request->validated();
-            $profile->update($validated);
-            
-            return response()->json([
-                'success' => true,
-                'data' => $profile,
-                'message' => 'Profile updated successfully'
-            ]);
-            
-        } catch (\Exception $e) {
+{
+    try {
+        $profile = Profile::findOrFail($id);
+        
+        // Get the authenticated user
+        $user = $request->user();
+        
+        // Authorization check: either admin or profile owner
+        if (!$user->isAdmin() && $user->id !== $profile->user_id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update profile',
-                'error' => $e->getMessage()
-            ], 500);
+                'message' => 'You can only update your own profile'
+            ], 403);
         }
+        
+        $validated = $request->validated();
+        $profile->update($validated);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $profile,
+            'message' => 'Profile updated successfully'
+        ]);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update profile',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 
     /**
      * Remove the specified resource.
@@ -134,12 +143,11 @@ class ProfileController extends Controller
         try {
             $profile = Profile::findOrFail($id);
             $profile->delete();
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Profile deleted successfully'
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+
+
+    public function store(Request $request)
+    {
+        return $this->register($request);
+    }
+
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'username' => 'required|string|max:255',
+            'username' => 'nullable|string|max:255',
             'email' => [
                 'required',
                 'string',
@@ -24,7 +31,7 @@ class UserController extends Controller
             ],
             'password' => 'required|string|min:8|confirmed',
             'first_name' => 'string|max:255|nullable',
-            'last_name' => 'string|max:255|nullable', 
+            'last_name' => 'string|max:255|nullable',
             'phone' => 'string|max:20|nullable',
             'address' => 'string|nullable',
             'date_of_birth' => 'date|nullable',
@@ -49,28 +56,55 @@ class UserController extends Controller
         ], 201);
     }
 
+    // After installing passport
     public function login(Request $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        $credentials = $request->only(['email', 'username', 'password']);
 
-        if (!Auth::attempt($validated)) {
+        $field = filter_var($credentials['email'] ?? $credentials['username'], FILTER_VALIDATE_EMAIL)
+            ? 'email'
+            : 'username';
+
+        $authCredentials = [
+            $field => $credentials[$field],
+            'password' => $credentials['password']
+        ];
+
+        if (!Auth::attempt($authCredentials)) {
             return response()->json([
-                'message' => 'Invalid email or password',
+                'status' => 'error',
+                'message' => 'Invalid credentials'
             ], 401);
         }
 
-        $user = User::where('email', $validated['email'])->firstOrFail();
+        $user = User::find(Auth::id());
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
+        }
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // FIXED: Include Role_id in the response
+        $userData = [
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'role_id' => $user->role_id
+        ];
+
         return response()->json([
-            'message' => 'Login successful',
-            'user' => $user,
+            'status' => 'success',
             'token' => $token,
+            'user' => $userData,
+            'message' => 'Login successful'
         ], 200);
     }
+
 
     public function logout(Request $request)
     {
@@ -81,102 +115,60 @@ class UserController extends Controller
         ], 200);
     }
 
-    /**
-     * Get all users
-     * @return \Illuminate\Http\JsonResponse
-     * 
-     * @Route("GET /api/users", name="users.index")
-     * @Route("GET /api/users", name="users.index", middleware=["auth:sanctum"])     * @response 200 {
-     *   "users": [
-     *     {
-     *       "id": 1,
-     *       "username": "john_doe",
-     *       "email": "john@example.com",
-     *       "first_name": "John",
-     *       "last_name": "Doe"
-     *     }
-     *   ]
-     * }
-     */
+
+
     public function index()
     {
         $users = User::all();
         return response()->json(['users' => $users], 200);
     }
 
-    /**
-     * Get single user by ID
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     * 
-     * @Route("GET /api/users/{id}", name="users.show")
-     * 
-     * @response 200 {
-     *   "user": {
-     *     "id": 1,
-     *     "username": "john_doe", 
-     *     "email": "john@example.com",
-     *     "first_name": "John",
-     *     "last_name": "Doe"
-     *   }
-     * }
-     * @response 404 {
-     *   "message": "User not found"
-     * }
-     */
     public function show($id)
     {
         $user = User::findOrFail($id);
         return response()->json(['user' => $user], 200);
     }
 
-    /**
-     * Update user
-     * @param Request $request
-     * @param int $id  
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @Route("PUT /api/users/{id}", name="users.update")
-     *
-     * @response 200 {
-     *   "message": "User updated successfully",
-     *   "user": {
-     *     "id": 1,
-     *     "username": "john_doe_updated",
-     *     "email": "john@example.com",
-     *     "first_name": "John",
-     *     "last_name": "Doe"
-     *   }
-     * }
-     * @response 404 {
-     *   "message": "User not found"
-     * }
-     * @response 422 {
-     *   "message": "The given data was invalid",
-     *   "errors": {
-     *     "email": ["The email has already been taken."]
-     *   }
-     * }
-     */
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
+        $currentUser = $request->user();
         $validated = $request->validate([
-            'username' => 'string|max:255',
-            'email' => [
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($id),
-            ],
-            'first_name' => 'string|max:255|nullable',
-            'last_name' => 'string|max:255|nullable',
-            'phone' => 'string|max:20|nullable',
+            'first_name' => 'string|max:255|required',
+            'last_name' => 'string|max:255|required',
+            'phone' => 'nullable|numeric|digits_between:1,20',
             'address' => 'string|nullable',
             'date_of_birth' => 'date|nullable',
-            'bio' => 'string|nullable'
+            'bio' => 'string|nullable',
+            'role_id' => 'sometimes|integer|exists:roles,id'
         ]);
+
+        if (isset($request->role_id) && $currentUser->id != 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Only super admin can change user roles'
+            ], 403);
+        }
+
+        try {
+            // Find the user
+            $user = User::findOrFail($id);
+
+            // Update the user
+            $user->update($validated);
+
+            // Return success response
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User updated successfully',
+                'user' => $user->load('role') // Load the role relationship
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update user: ' . $e->getMessage()
+            ], 500);
+        }
 
         $user->update($validated);
 
@@ -186,20 +178,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    /**
-     * Delete user
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @Route("DELETE /api/users/{id}", name="users.destroy")
-     *
-     * @response 200 {
-     *   "message": "User deleted successfully"
-     * }
-     * @response 404 {
-     *   "message": "User not found"
-     * }
-     */
     public function destroy($id)
     {
         $user = User::findOrFail($id);

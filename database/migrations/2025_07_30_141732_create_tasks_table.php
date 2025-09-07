@@ -16,9 +16,20 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('description')->nullable();
             $table->integer('priority')->required();
-            $table->foreignId('profile_id')->constrained()->references('id')->on('profiles')->cascadeOnDelete();
-            $table->foreignId('categorie_id')->constrained()->references('id')->on('categories')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('profile_id')
+                ->nullable()
+                ->constrained('profiles')
+                ->cascadeOnDelete();
+
+            $table->foreignId('categorie_id')
+                ->nullable()
+                ->constrained('categories')
+                ->cascadeOnDelete();
+
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -29,8 +40,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-        $table->dropForeign(['profile_id']);
-        $table->dropColumn('profile_id');
-    });
+            $table->dropForeign(['profile_id']);
+            $table->dropColumn('profile_id');
+            $table->dropForeign(['categorie_id']);
+            $table->dropColumn('categorie_id');
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
     }
 };

@@ -23,12 +23,9 @@ class StoreProfileRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
-            'email' => 'required|email|max:255|unique:profiles,email,' . $this->route('profile'),
-            'phone' => 'nullable|string|max:15',
-            'address' => 'nullable|string|max:255',
-            'date_of_birth' => 'nullable|date',
-            'bio' => 'nullable|string|max:500',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'bio' => 'string|max:500|nullable',
+            'user_id' => 'exists:users,id|required',
         ];
     }
 }

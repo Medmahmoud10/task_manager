@@ -13,10 +13,10 @@ class categorieseeder extends Seeder
      */
     public function run(): void
     {
-        $categoriess = [
-            'Backend' ,
+        $categories = [
+            'Backend',
             'Frontend',
-            'Fullstack',
+            'Fullstack', 
             'Mobile',
             'DevOps',
             'Data Science',
@@ -28,8 +28,8 @@ class categorieseeder extends Seeder
             'Home & Kitchen',
             'Sports & Outdoors',
         ];
-        foreach ($categoriess as $categorie) {
-            categories::create(['name'=>$categorie]);
+        foreach ($categories as $categorie) {
+            categories::create(['name' => $categorie]);
         }
     }
 }

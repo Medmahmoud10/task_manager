@@ -2,36 +2,30 @@
 
 namespace App\Models;
 
+use App\Http\Resources\Categories;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class task extends Model
+class Task extends Model
 {
-    protected $fillable = ['title', 'description', 'priority','Profile_id'];
+    protected $fillable = ['title', 'description', 'priority', 'Profile_id', 'categorie_id', 'user_id', 'status'];
     protected $guarded = ['id'];
     protected $table = 'tasks';
+    protected $casts = ['status' => 'string'];
+    
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
-    public function profile()
+    public function profile(): BelongsTo
     {
         return $this->belongsTo(Profile::class, 'Profile_id');
     }
 
-    public function categories()
-    {
-        // return $this->belongsToMany(categories::class, 'categorie_task', 'task_id', 'categorie_id');
-        return $this->belongsToMany(
-        \App\Models\categories::class, // Full namespace
-        'categorie_task', // pivot table name
-        'task_id',       // foreign key on pivot table
-        'categorie_id'   // related key on pivot table
-    )->withPivot('task_id', 'categorie_id');
-    }
-
-
-
-
-
-
-
-    
-
+    // FIXED: Changed method name to match eager loading
+    public function categorie(): BelongsTo
+{
+    return $this->belongsTo(\App\Models\categories::class, 'categorie_id');
+}
 }

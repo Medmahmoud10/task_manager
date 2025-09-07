@@ -23,11 +23,9 @@ class updateprofilerequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'avatar' => 'image|mimes:jpeg,png,jpg,gif',
-            'birthdate' => 'date|nullable',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'bio' => 'string|max:500|nullable',
-            'user_id' => 'exists:users,id|required',
+            'user_id' => 'required|exists:users,id',
         ];
     }
 }

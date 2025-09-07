@@ -2,22 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
+        // NO truncate/delete code! migrate:fresh already handles this
         $this->call([
-            userseeder::class,
-            categorieseeder::class,
-            profileseeder::class,
-            taskseeder::class,
+            RolePermissionSeeder::class,
         ]);
+        $this->call(RolePermissionSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(categorieseeder::class);
+        $this->call(ProfileSeeder::class);
+        $this->call(TaskSeeder::class);
     }
 }

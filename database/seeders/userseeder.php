@@ -6,12 +6,10 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
-class userseeder extends Seeder
+class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run()
     {
         $users = [
@@ -25,34 +23,19 @@ class userseeder extends Seeder
                 'address' => '123 Main St, Anytown, USA',
                 'date_of_birth' => '1990-01-01',
                 'bio' => 'A brief bio about John Doe.',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'username' => 'janedoe',
-                'password' => Hash::make('securepass456'),
-                'email' => 'jane.doe@example.com',
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-                'phone' => '2345678901',
-                'address' => '456 Oak Ave, Somewhere, USA',
-                'date_of_birth' => '1992-05-15',
-                'bio' => 'Jane is a software developer and artist.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 1,
             ],
             [
                 'username' => 'michael_s',
                 'password' => Hash::make('mypass789'),
-                'email' => 'michael.smith@example.com',
+                'email' => 'michael.smith@example.com', 
                 'first_name' => 'Michael',
                 'last_name' => 'Smith',
                 'phone' => '3456789012',
                 'address' => '789 Pine Rd, Nowhere, USA',
                 'date_of_birth' => '1985-11-22',
                 'bio' => 'Loves hiking and photography.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 2,
             ],
             [
                 'username' => 'sarahj',
@@ -64,8 +47,7 @@ class userseeder extends Seeder
                 'address' => '321 Elm St, Anycity, USA',
                 'date_of_birth' => '1988-07-30',
                 'bio' => 'Marketing professional and food blogger.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 2,
             ],
             [
                 'username' => 'david_wilson',
@@ -77,8 +59,7 @@ class userseeder extends Seeder
                 'address' => '654 Maple Dr, Yourtown, USA',
                 'date_of_birth' => '1993-03-10',
                 'bio' => 'Financial analyst and chess enthusiast.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 2,
             ],
             [
                 'username' => 'emily_adams',
@@ -90,8 +71,7 @@ class userseeder extends Seeder
                 'address' => '987 Cedar Ln, Theircity, USA',
                 'date_of_birth' => '1991-09-18',
                 'bio' => 'Teacher and children\'s book author.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 2,
             ],
             [
                 'username' => 'robert_brown',
@@ -103,8 +83,7 @@ class userseeder extends Seeder
                 'address' => '159 Birch Blvd, Ourcity, USA',
                 'date_of_birth' => '1987-12-05',
                 'bio' => 'Architect and urban planner.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 2,
             ],
             [
                 'username' => 'lisa_taylor',
@@ -116,8 +95,7 @@ class userseeder extends Seeder
                 'address' => '753 Walnut Ct, Thiscity, USA',
                 'date_of_birth' => '1994-06-25',
                 'bio' => 'Graphic designer and illustrator.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 2,
             ],
             [
                 'username' => 'thomas_clark',
@@ -129,8 +107,7 @@ class userseeder extends Seeder
                 'address' => '357 Spruce Way, Thatcity, USA',
                 'date_of_birth' => '1989-04-12',
                 'bio' => 'Engineer and amateur astronomer.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 2,
             ],
             [
                 'username' => 'amanda_lee',
@@ -142,11 +119,21 @@ class userseeder extends Seeder
                 'address' => '852 Redwood Ave, Theircity, USA',
                 'date_of_birth' => '1995-08-08',
                 'bio' => 'Doctor and travel enthusiast.',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'role_id' => 2,
             ]
         ];
 
-        DB::table('users')->insert($users);
+        foreach ($users as $userData) {
+            // Use updateOrCreate to handle existing users
+            User::updateOrCreate(
+                ['email' => $userData['email']], // Unique identifier
+                array_merge($userData, [
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ])
+            );
+        }
+
+        echo "✅ UserSeeder completed successfully! (Can run multiple times)\n";
     }
 }

@@ -2,16 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class profile extends Model
+class Profile extends Model
 {
-    protected $fillable = ['name','phone', 'date_of_birth', 'address', 'bio','user_id'];
-    protected $guarded = ['id'];
-    protected $table = 'profiles';
+    use HasFactory;
 
-    public function tasks()
+    protected $fillable = [
+        'name', 'avatar', 'bio', 'user_id'
+    ];
+
+    public function user(): BelongsTo
     {
-        return $this->hasMany(categories::class,'Categorie_task');
+        return $this->belongsTo(User::class);
+    }
+
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'profile_id');
     }
 }

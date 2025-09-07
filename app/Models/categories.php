@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Console\View\Components\Task;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class categories  extends Model
+class categories extends Model // ← Changed to PascalCase
 {
-    public function tasks()
+    protected $fillable = ['name'];
+    
+    // FIXED: Import correct Task model and use proper relationship
+    public function tasks(): HasMany
     {
-        return $this->belongsToMany(\App\Models\task::class, 'categorie_task');
+        return $this->hasMany(\App\Models\Task::class, 'categorie_id');
     }
 }

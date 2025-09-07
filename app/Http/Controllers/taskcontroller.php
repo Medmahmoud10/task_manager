@@ -2,194 +2,155 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\storetaskrequest;
-use App\Http\Requests\updatetaskrequest;
-use App\Models\categories;
-use App\Models\task;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Task;
 
-class taskcontroller extends Controller
+class TaskController extends Controller
 {
-
-
-    public function addcategorietotask(Request $request, $task_id)
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
-        $task = task::find($task_id);
-        $task->categories()->attach($request->categories_id);
-        return response()->json(['message' => 'Categories added to task successfully'], 200);
+        // Fetch all tasks from the database.
+        $tasks = Task::with('categorie')->get();
+
+        // Return JSON response for API
+        return response()->json([
+            'status' => 'success',
+            'data' => $tasks
+        ]);
     }
-
-
-
-    public function GetCategorietoTask($task_id)
-    {
-        $categories = DB::table('categorie_task')
-            ->where('task_id', $task_id)
-            ->join('categories', 'categorie_task.categorie_id', '=', 'categories.id')
-            ->select([
-                'categories.id',
-                'categories.name',
-                'categories.created_at',
-                'categories.updated_at',
-                'categorie_task.task_id',
-                'categorie_task.categorie_id'
-            ])
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'created_at' => $item->created_at,
-                    'updated_at' => $item->updated_at,
-                    'pivot' => [
-                        'task_id' => $item->task_id,
-                        'category_id' => $item->categorie_id
-                    ]
-                ];
-            });
-
-        return response()->json($categories);
-    }
-
-    public function getTaskCategories($task_id)
-    {
-        $task = \App\Models\task::with('categories')->find($task_id);
-
-        // Return error if task doesn't exist
-        if (!$task) {
-            return response()->json(['error' => 'Task not found'], 404);
-        }
-
-        // Return formatted categories
-        return response()->json($task->categories);
-    }
-
-
-
-    // app/Http/Controllers/TaskController.php
-    public function indexCategories(Task $task)
-    {
-        return response()->json(
-            $task->categories->map(function ($category) use ($task) {
-                return [
-                    'id' => $category->id,
-                    'name' => $category->name,
-                    'created_at' => $category->created_at,
-                    'updated_at' => $category->updated_at,
-                    'pivot' => [
-                        'task_id' => $task->id,
-                        'category_id' => $category->id
-                    ]
-                ];
-            })
-        );
-        return $task->categories;
-    }
-
-
-
-
-    // public function getProfileTasks($profileId)
-    // {
-    //     $tasks = Task::where('profile_id', $profileId)->get();
-    //     return response()->json($tasks);
-    // }
-
-    // public function getTaskWithRelations($taskId)
-    // {
-    //     $task = Task::with(['profile', 'category'])->findOrFail($taskId);
-    //     return response()->json($task);
-    // }
-    public function index(task $task)
-    {
-        $task = task::all();
-        return response()->json($task, 200);
-        $task->load(['categories' => function ($query) {
-            $query->select('categories.id', 'name', 'created_at', 'updated_at');
-        }]);
-
-        return $task->categories;
-    }
-
-   
 
     /**
-     * Update the category of a task.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $task_id
-     * @return \Illuminate\Http\JsonResponse
+     * Store a newly created resource in storage.
      */
-    public function updateTaskCategory(Request $request, $task_id)
+    public function store(Request $request)
     {
-        $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id'
+        // Validate the incoming request data.
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'priority' => 'required|integer',
+            'status' => 'required|in:pending,in_progress,completed',
+            'profile_id' => 'nullable|exists:profiles,id',
+            'categorie_id' => 'nullable|exists:categories,id',
+            'user_id' => 'nullable|exists:users,id',
         ]);
 
-        $task = Task::findOrFail($task_id);
-        $task->update(['categorie_id' => $validated['categorie_id']]);
+        // Create a new task with the validated data.
+        $task = Task::create($validatedData);
 
-        return response()->json($task);
+        // Return JSON response for API
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Task created successfully!',
+            'data' => $task
+        ], 201);
     }
 
-    public function store(storetaskrequest $request)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        $task = task::create($request->validated());
-        DB::table('categorie_task')->insert([
-            'task_id' => $task->id,
-            'categorie_id' => $request->categorie_id,
-        ]);
+        // Find the task by its ID.
+        $task = Task::with('categorie')->find($id);
 
-        return response()->json($task, 201);
-    }
-
-
-    public function show(int $id, Request $request)
-    {
-        $task = Task::query();
-
-        // Load relationships only if requested
-        if ($request->has('with')) {
-            $task->with(explode(',', $request->with));
-        }
-
-        $task = $task->find($id);
-        return response()->json($task, 200);
-    }
-
-
-    public function update(updatetaskrequest $request, string $id)
-    {
-
-        $task = task::find($id);
         if (!$task) {
-            return response()->json(['error' => 'Task not found'], 404);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Task not found'
+            ], 404);
         }
-        $task->update($request->validated());
-        return response()->json($task, 200);
+
+        // Return JSON response for API
+        return response()->json([
+            'status' => 'success',
+            'data' => $task
+        ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        // Find the task by its ID.
+        $task = Task::find($id);
 
+        if (!$task) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Task not found'
+            ], 404);
+        }
+
+        // Validate the incoming request data.
+        $validatedData = $request->validate([
+            'title' => 'sometimes|required|string|max:255',
+            'description' => 'nullable|string',
+            'priority' => 'sometimes|required|integer',
+            'status' => 'sometimes|required|in:pending,in_progress,completed',
+            'profile_id' => 'nullable|exists:profiles,id',
+            'categorie_id' => 'nullable|exists:categories,id',
+            'user_id' => 'nullable|exists:users,id',
+        ]);
+
+        // Update the task with the validated data.
+        $task->update($validatedData);
+
+        // Return JSON response for API
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Task updated successfully!',
+            'data' => $task
+        ]);
+    }
+
+    /**
+     * Update the status of a specific task.
+     */
+    public function updateStatus(Request $request, Task $task)
+    {
+        // Validate the incoming request data.
+        $validatedData = $request->validate([
+            'status' => 'required|in:pending,in_progress,completed',
+        ]);
+
+        // Update the task's status with the validated data.
+        $task->update($validatedData);
+
+        // Return JSON response for API
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Task status updated successfully!',
+            'data' => $task
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(string $id)
     {
-        $task = task::find($id);
+        // Find the task by its ID.
+        $task = Task::find($id);
+
         if (!$task) {
-            return response()->json(['error' => 'Task not found'], 404);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Task not found'
+            ], 404);
         }
+
+        // Delete the task
         $task->delete();
-        return response()->json(['message' => 'Task deleted successfully'], 200);
+
+        // Return JSON response for API
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Task deleted successfully!'
+        ]);
     }
-};
-
-
-
-
-
-
-
-//public function show(int $id)
-    // {
-    //     $task = task::find($id);
-    //     return response()->json($task, 200);
-    // }
+}
