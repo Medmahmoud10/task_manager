@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "743a1d76376a723dbdfe04e41469e4c6",
+    "content-hash": "b5ae1b3f270017f41c943ec58957307c",
     "packages": [
         {
             "name": "brick/math",
@@ -1330,16 +1330,16 @@
         },
         {
             "name": "laravel/sanctum",
-            "version": "v4.1.1",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sanctum.git",
-                "reference": "a360a6a1fd2400ead4eb9b6a9c1bb272939194f5"
+                "reference": "fd6df4f79f48a72992e8d29a9c0ee25422a0d677"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sanctum/zipball/a360a6a1fd2400ead4eb9b6a9c1bb272939194f5",
-                "reference": "a360a6a1fd2400ead4eb9b6a9c1bb272939194f5",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/fd6df4f79f48a72992e8d29a9c0ee25422a0d677",
+                "reference": "fd6df4f79f48a72992e8d29a9c0ee25422a0d677",
                 "shasum": ""
             },
             "require": {
@@ -1390,7 +1390,7 @@
                 "issues": "https://github.com/laravel/sanctum/issues",
                 "source": "https://github.com/laravel/sanctum"
             },
-            "time": "2025-04-23T13:03:38+00:00"
+            "time": "2025-07-09T19:45:24+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -1584,7 +1584,7 @@
                     "name": "Colin O'Dell",
                     "email": "colinodell@gmail.com",
                     "homepage": "https://www.colinodell.com",
-                    "role": "Lead Developer"
+                    "Role": "Lead Developer"
                 }
             ],
             "description": "Highly-extensible PHP Markdown parser which fully supports the CommonMark spec and GitHub-Flavored Markdown (GFM)",
@@ -1672,7 +1672,7 @@
                     "name": "Colin O'Dell",
                     "email": "colinodell@gmail.com",
                     "homepage": "https://www.colinodell.com",
-                    "role": "Lead Developer"
+                    "Role": "Lead Developer"
                 }
             ],
             "description": "Define configuration arrays with strict schemas and access values with dot notation",
@@ -5615,7 +5615,7 @@
                 {
                     "name": "Tijs Verkoyen",
                     "email": "css_to_inline_styles@verkoyen.eu",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
@@ -5953,7 +5953,7 @@
                 {
                     "name": "Filipe Dobreira",
                     "homepage": "https://github.com/filp",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "php error handling for cool kids",
@@ -6097,16 +6097,16 @@
         },
         {
             "name": "laravel/sail",
-            "version": "v1.43.1",
+            "version": "v1.44.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "3e7d899232a8c5e3ea4fc6dee7525ad583887e72"
+                "reference": "a09097bd2a8a38e23ac472fa6a6cf5b0d1c1d3fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/3e7d899232a8c5e3ea4fc6dee7525ad583887e72",
-                "reference": "3e7d899232a8c5e3ea4fc6dee7525ad583887e72",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/a09097bd2a8a38e23ac472fa6a6cf5b0d1c1d3fe",
+                "reference": "a09097bd2a8a38e23ac472fa6a6cf5b0d1c1d3fe",
                 "shasum": ""
             },
             "require": {
@@ -6156,7 +6156,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2025-05-19T13:19:21+00:00"
+            "time": "2025-07-04T16:17:06+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -6203,19 +6203,19 @@
                     "name": "Pádraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "https://github.com/padraic",
-                    "role": "Author"
+                    "Role": "Author"
                 },
                 {
                     "name": "Dave Marshall",
                     "email": "dave.marshall@atstsolutions.co.uk",
                     "homepage": "https://davedevelopment.co.uk",
-                    "role": "Developer"
+                    "Role": "Developer"
                 },
                 {
                     "name": "Nathanael Esayeas",
                     "email": "nathanael.esayeas@protonmail.com",
                     "homepage": "https://github.com/ghostwriter",
-                    "role": "Lead Developer"
+                    "Role": "Lead Developer"
                 }
             ],
             "description": "Mockery is a simple yet flexible PHP mock object framework",
@@ -6439,17 +6439,17 @@
                 {
                     "name": "Arne Blankerts",
                     "email": "arne@blankerts.de",
-                    "role": "Developer"
+                    "Role": "Developer"
                 },
                 {
                     "name": "Sebastian Heuer",
                     "email": "sebastian@phpeople.de",
-                    "role": "Developer"
+                    "Role": "Developer"
                 },
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
@@ -6496,17 +6496,17 @@
                 {
                     "name": "Arne Blankerts",
                     "email": "arne@blankerts.de",
-                    "role": "Developer"
+                    "Role": "Developer"
                 },
                 {
                     "name": "Sebastian Heuer",
                     "email": "sebastian@phpeople.de",
-                    "role": "Developer"
+                    "Role": "Developer"
                 },
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "Library for handling version information and constraints",
@@ -6571,7 +6571,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information.",
@@ -6633,7 +6633,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "FilterIterator implementation that filters files based on a list of suffixes.",
@@ -6698,7 +6698,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Invoke callables with a timeout",
@@ -6757,7 +6757,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Simple template engine.",
@@ -6817,7 +6817,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Utility class for timing",
@@ -6907,7 +6907,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "The PHP Unit Testing framework.",
@@ -6985,7 +6985,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Library for parsing CLI options",
@@ -7042,7 +7042,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Collection of value objects that represent the PHP code units",
@@ -7231,7 +7231,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Library for calculating the complexity of PHP code units",
@@ -7560,7 +7560,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Library for counting the lines of code in PHP source code",
@@ -7792,7 +7792,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Collection of value objects that represent the types of the PHP type system",
@@ -7845,7 +7845,7 @@
                 {
                     "name": "Sebastian Bergmann",
                     "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "Role": "lead"
                 }
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
@@ -7901,7 +7901,7 @@
                     "name": "Freek Van de Herten",
                     "email": "freek@spatie.be",
                     "homepage": "https://spatie.be",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "A better backtrace",
@@ -7978,7 +7978,7 @@
                 {
                     "name": "Ruben Van Assche",
                     "email": "ruben@spatie.be",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "This is my package error-solutions",
@@ -8126,7 +8126,7 @@
                 {
                     "name": "Spatie",
                     "email": "info@spatie.be",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "A beautiful error page for PHP applications.",
@@ -8217,7 +8217,7 @@
                 {
                     "name": "Spatie",
                     "email": "info@spatie.be",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "A beautiful error page for Laravel applications.",
@@ -8348,7 +8348,7 @@
                 {
                     "name": "Arne Blankerts",
                     "email": "arne@blankerts.de",
-                    "role": "Developer"
+                    "Role": "Developer"
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",

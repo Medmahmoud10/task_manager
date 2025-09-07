@@ -1,0 +1,21 @@
+User: johndoe
+Role: user
+Role Description: Regular user
+
+Is admin: No
+Can manage users: No
+Can manage tasks: No
+
+All users with Roles:
+ - johndoe: user
+ - janedoe: user
+ - michael_s: user
+ - sarahj: user
+ - david_wilson: user
+ - emily_adams: user
+ - robert_brown: user
+ - lisa_taylor: user
+ - thomas_clark: user
+ - amanda_lee: user
+
+❌ First user should be admin but is: user

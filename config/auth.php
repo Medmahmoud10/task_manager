@@ -40,6 +40,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        
+        // ADD THIS API GUARD CONFIGURATION
+        'api' => [
+            'driver' => 'sanctum', // Use sanctum for API authentication
+            'provider' => 'users',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -63,6 +70,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+            // REMOVE THIS LINE: Laravel\Sanctum\SanctumServiceProvider::class, ← WRONG LOCATION
         ],
 
         // 'users' => [
