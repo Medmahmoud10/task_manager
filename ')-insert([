@@ -1,0 +1,33 @@
+[90m= [39m[34;4mIlluminate\Support\Collection[39;24m {#6563
+    [34mall[39m: [
+      {#6562
+        +"[1mRole_id[22m": [35m1[39m,
+        +"[1mpermission_id[22m": [35m1[39m,
+      },
+      {#2335
+        +"[1mRole_id[22m": [35m2[39m,
+        +"[1mpermission_id[22m": [35m1[39m,
+      },
+      {#6564
+        +"[1mRole_id[22m": [35m1[39m,
+        +"[1mpermission_id[22m": [35m2[39m,
+      },
+      {#6567
+        +"[1mRole_id[22m": [35m2[39m,
+        +"[1mpermission_id[22m": [35m2[39m,
+      },
+      {#6557
+        +"[1mRole_id[22m": [35m1[39m,
+        +"[1mpermission_id[22m": [35m3[39m,
+      },
+      {#6558
+        +"[1mRole_id[22m": [35m1[39m,
+        +"[1mpermission_id[22m": [35m4[39m,
+      },
+      {#6555
+        +"[1mRole_id[22m": [35m1[39m,
+        +"[1mpermission_id[22m": [35m5[39m,
+      },
+    ],
+  }
+

@@ -118,6 +118,11 @@ return [
     |
     */
 
+    // The maintenance configuration appears correct and follows Laravel's standard format
+    // It defines:
+    // - A driver (defaulting to 'file')
+    // - A store (defaulting to 'database')
+    // No problems detected with this configuration
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),

@@ -1,0 +1,21 @@
+Roles:
+ID: 1, Name: admin
+ID: 2, Name: user
+
+Permissions:
+ID: 1, Name: manage_tasks
+ID: 2, Name: manage_categories
+ID: 3, Name: manage_profiles
+ID: 4, Name: manage_users
+ID: 5, Name: view_reports
+
+Users:
+
+Permission-Role relationships:
+Role ID: 1, Permission ID: 1
+Role ID: 2, Permission ID: 1
+Role ID: 1, Permission ID: 2
+Role ID: 2, Permission ID: 2
+Role ID: 1, Permission ID: 3
+Role ID: 1, Permission ID: 4
+Role ID: 1, Permission ID: 5
